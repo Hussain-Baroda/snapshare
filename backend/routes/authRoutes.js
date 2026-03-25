@@ -1,7 +1,9 @@
 import express from "express";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import User from "../models/user.js";
 import generateToken from "../utils/generateToken.js";
+
+console.log("User model:", User);
 
 const router = express.Router();
 
@@ -21,11 +23,13 @@ router.post("/register", async(req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // Create new user in db 
-        const user = new User.create({
+        const user = new User({
             username,
             email,
             password: hashedPassword,
         });
+        await user.save();
+
 
         // send back tokem +    user info
         res.status(201).json({
@@ -41,7 +45,7 @@ router.post("/register", async(req, res) => {
 });
 
 // Login user
-router,post("/login", async(req, res) => {
+router.post("/login", async(req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -52,9 +56,9 @@ router,post("/login", async(req, res) => {
         }
 
         // Check password
-        const isMatch = await bcrypt.compare(passsword, user.password); 
+        const isMatch = await bcrypt.compare(password, user.password); 
         if (!isMatch) {
-            return res.status(400),json({ message: "Invalid email or password"});
+            return res.status(400).json({ message: "Invalid email or password"});
         }
         // send back token + user info
         res.json({
@@ -71,3 +75,5 @@ router,post("/login", async(req, res) => {
 });
 
 export default router;
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YzQzMzBlMDQyMmQ5MGUyYjEzYmIzNiIsImlhdCI6MTc3NDQ2NTg4NiwiZXhwIjoxNzc1MDcwNjg2fQ.enPHZaoRr4nNxK1XMTcfo_Uj3KCrrsSbLl-pf0eCNpc
