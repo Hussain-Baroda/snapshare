@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
+import authRoutes from "./rotes/authRoutes.js";
 
 // Load environment variables FIRST before anything else
 dotenv.config();
@@ -20,6 +21,8 @@ app.use(express.urlencoded({ extended: true })); // parse form data
 app.get("/", (req, res) => {
   res.json({ message: "SnapShare API is running 🚀" });
 });
+
+app.use("/api/auth", authRoutes); // Auth routes
 
 // ── Start server ────────────────────────────────────
 const PORT = process.env.PORT || 5000;
