@@ -75,5 +75,3 @@ router.post("/login", async(req, res) => {
 });
 
 export default router;
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YzQzMzBlMDQyMmQ5MGUyYjEzYmIzNiIsImlhdCI6MTc3NDQ2NTg4NiwiZXhwIjoxNzc1MDcwNjg2fQ.enPHZaoRr4nNxK1XMTcfo_Uj3KCrrsSbLl-pf0eCNpc
