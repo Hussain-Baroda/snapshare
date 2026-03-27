@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
 
 // Load environment variables FIRST before anything else
 dotenv.config();
@@ -23,6 +24,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes); // Auth routes
+app.use("/api/posts", postRoutes); // Post routes
+
+// ── Error handling middleware ─────────────────────────
 
 app.use((err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
