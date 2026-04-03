@@ -106,3 +106,69 @@ router.put("/:id/follow", protect, async (req, res) => {
 });
 
 // ── UPDATE PROFILE ───────────────────────────────────
+router.put("/profile", protect, async (req, res) => {
+    try {
+        const { username, email, bio, profilePic  } = req.body;
+
+        const user =  await User.findById(req.user._id);
+
+    // only update fields that were actually sent
+        if (username) user.username = username;
+        if (email !== undefined) user.email = email;
+        if (bio !== undefined) user.bio = bio;
+        if (profilePic !== undefined) user.profilePic = profilePic;
+
+        await user.save();
+
+        res.json({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+            profilePic: user.profilePic,
+            followers: user.followers,
+            following: user.following,
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// ── GET FOLLOWERS LIST ───────────────────────────────
+router.get("/:id/followers" , protect, async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
+            .select("followers")
+            .populate("followers", "username profilePic bio");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json(user.followers);
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// ── GET FOLLOWING LIST ───────────────────────────────
+router.get("/:id/following" , protect, async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
+            .select("following")
+            .populate("following", "username profilePic bio");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json(user.following);
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+export default router;

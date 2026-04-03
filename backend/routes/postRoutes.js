@@ -93,6 +93,7 @@ router.delete("/:id", protect, async (req, res) => {
 // ── LIKE / UNLIKE A POST ─────────────────────────────
 router.put("/:id/like", protect, async (req, res) => {
   try {
+    
     const post = await Post.findById(req.params.id);
 
     if (!post) {
@@ -113,6 +114,9 @@ router.put("/:id/like", protect, async (req, res) => {
       // like — add their ID to likes array
       post.likes.push(req.user._id);
     }
+
+    // 🔥 ADD THIS LINE
+    post.markModified("likes");
 
     await post.save();
     res.json({ likes: post.likes.length, liked: !alreadyLiked });

@@ -4,6 +4,8 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+
 
 // Load environment variables FIRST before anything else
 dotenv.config();
@@ -25,6 +27,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes); // Auth routes
 app.use("/api/posts", postRoutes); // Post routes
+app.use("/api/users", userRoutes);
 
 // ── Error handling middleware ─────────────────────────
 
